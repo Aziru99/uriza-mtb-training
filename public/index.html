@@ -1,0 +1,508 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root{color-scheme:dark;--bg:#101411;--panel:#171d19;--panel2:#202821;--surface:#151a16;--text:#f1f4ef;--muted:#a0aaa0;--line:#303a31;--accent:#a8d85b;--accent-strong:#c2ec78;--accent-ink:#1b2810;--warm:#d9a65b;--radius:15px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    .app{width:min(1280px,100%);margin:auto;padding:24px 24px 54px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:44px;height:44px;border:1px solid #46533d;border-radius:12px;display:grid;place-items:center;background:#222c1e;font-size:22px}.brand-name{font-weight:850;letter-spacing:.025em;font-size:1.03rem}.brand-sub{color:var(--muted);font-size:.78rem}.pill{border:1px solid #3a4930;color:var(--accent-strong);background:#1b2417;padding:6px 10px;border-radius:7px;font-size:.72rem;font-weight:750;white-space:nowrap;letter-spacing:.04em}
+    .hero{padding:26px 0 27px;border-bottom:1px solid var(--line);position:relative;margin-bottom:25px}.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem;font-weight:850}.hero h1{font-size:clamp(2rem,4vw,3rem);letter-spacing:-.045em;line-height:1.08;margin:10px 0 12px;max-width:680px}.hero p{color:#bdc6bb;max-width:660px;margin:0}.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.hero-tag{border:1px solid #364131;background:#1a2119;padding:6px 10px;border-radius:6px;color:#d6dfd1;font-size:.78rem}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin:0 0 16px}.section-head h2{font-size:1.35rem;letter-spacing:-.03em;margin:0}.section-head p{color:var(--muted);margin:4px 0 0;font-size:.87rem}.count{color:var(--muted);font-size:.82rem;white-space:nowrap}.library-layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:20px;align-items:start}.filters{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:15px;min-width:0}.filter-summary{display:none}.filter-content{display:grid;gap:15px}.filter-group{min-width:0}.field-label{display:block;color:#d2d9cf;font-size:.76rem;font-weight:750;margin:0 0 6px}.control{width:100%;border:1px solid #3a453a;background:#101510;color:var(--text);border-radius:8px;padding:10px 11px;outline:none;min-width:0}.control:focus{border-color:var(--accent);box-shadow:0 0 0 2px #a8d85b20}.filter-actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid transparent;border-radius:8px;padding:10px 13px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:background .15s,border-color .15s,color .15s}.btn-primary{background:var(--accent);color:var(--accent-ink)}.btn-primary:hover{background:var(--accent-strong)}.btn-secondary{background:#252e25;border-color:#3a4639;color:#edf2e9}.btn-secondary:hover{background:#303b2f}.btn-quiet{background:transparent;border-color:#3a4639;color:#d1d9ce}.btn-quiet:hover{border-color:var(--accent);color:var(--accent-strong)}.filter-actions .btn{font-size:.76rem;padding:9px 10px}.active-filters{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 13px}.active-filters-label{color:var(--muted);font-size:.74rem}.active-filter{display:inline-flex;align-items:center;gap:7px;border:1px solid #405037;background:#222b1d;color:#dcebcf;border-radius:6px;padding:4px 7px;font-size:.75rem}.active-filter button{border:0;background:transparent;color:var(--accent-strong);padding:0 1px;font-size:1rem;line-height:1}.active-filter button:hover{color:white}
+    .results-area{min-width:0}.library{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.workout{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px;text-align:left;color:var(--text);min-width:0;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:10px}.workout:hover{border-color:#65784d;background:#1b231a}.workout.selected{border-color:var(--accent);background:#20291b}.workout-top{display:flex;align-items:center;justify-content:space-between;gap:9px}.workout-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;background:#283323;color:var(--accent-strong);font-size:18px;flex-shrink:0}.category{color:#d9e9c9;background:#293522;border:1px solid #46573a;border-radius:5px;padding:4px 7px;font-size:.65rem;font-weight:800;line-height:1.3;text-align:right}.workout h3{margin:0;font-size:.98rem;line-height:1.35;letter-spacing:-.015em}.workout .day{color:var(--muted);font-size:.74rem;margin-top:-5px}.workout .summary{color:#bac4b8;font-size:.8rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.4em}.mini-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}.mini-meta span{font-size:.69rem;color:#d1d9cf;background:#242c24;border-radius:5px;padding:4px 6px}.select-label{font-size:.77rem;color:var(--accent-strong);font-weight:800;margin-top:1px}.empty{padding:28px;text-align:center;border:1px dashed #3b473b;border-radius:12px;color:var(--muted);grid-column:1/-1}
+    .detail-panel{background:transparent;border:0;border-radius:0;overflow:visible}.detail-head{padding:21px 0 18px;border-bottom:1px solid var(--line);display:flex;align-items:start;justify-content:space-between;gap:15px}.detail-head h2{margin:6px 0 5px;font-size:clamp(1.6rem,3vw,2.15rem);letter-spacing:-.04em}.detail-head p{margin:0;color:var(--muted);font-size:.85rem}.detail-source{align-self:center;max-width:220px}.detail-body{padding:20px 0}.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}.stat .k{color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-size:.64rem;font-weight:850}.stat .v{font-weight:800;font-size:.95rem;margin-top:5px;overflow-wrap:anywhere}.protocol{margin-top:12px;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:10px}.protocol h3{font-size:.91rem;margin:0 0 7px;display:flex;align-items:center;gap:9px}.protocol p{margin:0;color:#c8d0c5;white-space:pre-line}.protocol p+p{margin-top:8px}.protocol .step-no{display:inline-grid;place-items:center;width:25px;height:25px;background:#2a3622;border:1px solid #46583a;border-radius:6px;color:var(--accent-strong);font-size:.73rem}.detail-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:17px}.back-row{padding:2px 0 10px}.back-row .btn{padding-left:0;background:transparent;border-color:transparent;color:var(--accent-strong)}.back-row .btn:hover{color:white}.form-panel{display:none;margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}.form-panel.open{display:block}.form-head{margin-bottom:18px}.form-head h2{margin:0 0 4px;font-size:1.2rem}.form-head p{margin:0;color:var(--muted);font-size:.87rem}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.form-field{min-width:0}.form-field.full{grid-column:1/-1}.form-field label{display:block;font-size:.8rem;font-weight:750;margin-bottom:7px;color:#dbe2d7}.hint{font-size:.74rem;color:var(--muted);margin:6px 0 0}.form-field textarea{resize:vertical;min-height:88px}.form-actions{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}#status{font-size:.85rem;font-weight:750}.success{color:var(--accent-strong)}.error{color:#ff9a8f}.footnote{text-align:center;color:#788375;font-size:.74rem;margin:30px 0 0}.detail-mode .hero,.detail-mode #librarySection{display:none}.detail-mode #detailPanel{display:block}.detail-mode .app{max-width:1000px}
+    @media(min-width:1050px){.library{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:850px){.app{padding:20px 17px 45px}.library-layout{grid-template-columns:215px minmax(0,1fr);gap:14px}.library{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:21px 0}}
+    @media(max-width:650px){.app{padding:14px 12px 35px}.topbar{align-items:flex-start;margin-bottom:18px}.pill{font-size:.63rem;white-space:normal;text-align:center;max-width:125px}.brand-mark{width:39px;height:39px}.brand-name{font-size:.93rem}.hero{padding:15px 0 22px;margin-bottom:22px}.hero h1{font-size:2.05rem}.hero-tags{gap:6px}.hero-tag{font-size:.72rem;padding:5px 7px}.section-head{align-items:start}.section-head h2{font-size:1.2rem}.count{font-size:.76rem}.library-layout{display:block}.filters{padding:0;margin-bottom:13px}.filter-details{border-radius:var(--radius)}.filter-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;list-style:none;padding:13px 14px;font-weight:800;cursor:pointer}.filter-summary::-webkit-details-marker{display:none}.filter-summary:after{content:'＋';color:var(--accent);font-size:1.1rem}.filter-details[open] .filter-summary:after{content:'−'}.filter-content{padding:0 13px 14px;gap:12px}.filter-details:not([open]) .filter-content{display:none}.filter-actions .btn{flex:1}.library{grid-template-columns:1fr}.workout{padding:13px}.detail-head{padding:18px 0;flex-direction:column}.detail-source{align-self:flex-start}.detail-body{padding:15px 0}.stats-grid{gap:7px}.stat{padding:10px}.form-panel{padding:16px}.form-grid{grid-template-columns:1fr}.form-field.full{grid-column:auto}.detail-actions .btn{width:100%}.active-filters{margin-bottom:12px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">🚵</div><div><div class="brand-name">AGURIZA TRAINING</div><div class="brand-sub">Tu biblioteca de entrenamiento MTB</div></div></div>
+      <div class="pill">● PLANIFICADOR PERSONAL</div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">EL RETO ES PERSONAL</div>
+      <h1>Entrena con intención.<br>Rueda más fuerte.</h1>
+      <p>Encuentra la sesión que necesitas, revisa el protocolo y registra cómo respondió tu cuerpo. Tus actividades y métricas reales siguen en Strava.</p>
+      <div class="hero-tags"><span class="hero-tag">⛰️ Fuerza en subida</span><span class="hero-tag">⚡ Velocidad e intervalos</span><span class="hero-tag">🛣️ Resistencia</span><span class="hero-tag">🧠 Sensaciones</span></div>
+    </section>
+
+    <section id="librarySection">
+      <div class="section-head"><div><h2>Biblioteca de entrenamientos</h2><p>Encuentra una sesión por objetivo, terreno, intensidad o duración.</p></div><div class="count" id="resultCount" aria-live="polite">Cargando…</div></div>
+      <div class="library-layout">
+        <aside class="filters" aria-label="Filtros de entrenamientos">
+          <details class="filter-details" id="filterDetails" open>
+            <summary class="filter-summary"><span>Filtrar entrenamientos</span><span id="activeFilterCount" class="count">0 activos</span></summary>
+            <div class="filter-content">
+              <div class="filter-group"><label class="field-label" for="search">Buscar</label><input class="control" id="search" type="search" placeholder="Nombre, objetivo, zona…" autocomplete="off"></div>
+              <div class="filter-group"><label class="field-label" for="categoryFilter">Categoría</label><select class="control" id="categoryFilter"><option value="Todos">Todas las categorías</option><option value="Fuerza">Fuerza</option><option value="Explosividad">Explosividad</option><option value="Resistencia">Resistencia</option><option value="Velocidad e intervalos">Velocidad e intervalos</option><option value="Tempo">Tempo</option><option value="Mixto / técnica">Mixto / técnica</option></select></div>
+              <div class="filter-group"><label class="field-label" for="terrainFilter">Terreno</label><select class="control" id="terrainFilter"><option value="Todos">Todos los terrenos</option><option value="Subida">Subida</option><option value="Llano">Llano</option><option value="Montaña">Montaña</option><option value="Variable">Variable</option><option value="Ruta">Ruta / grupal</option></select></div>
+              <div class="filter-group"><label class="field-label" for="levelFilter">Nivel sugerido</label><select class="control" id="levelFilter"><option value="Todos">Todos los niveles</option><option value="Principiante">Principiante</option><option value="Intermedio">Intermedio</option><option value="Avanzado">Avanzado</option><option value="Ajustar">Por ajustar / no especificado</option></select></div>
+              <div class="filter-group"><label class="field-label" for="durationFilter">Duración estimada</label><select class="control" id="durationFilter"><option value="Todos">Cualquier duración</option><option value="short">Hasta 45 min</option><option value="medium">46–75 min</option><option value="long">Más de 75 min</option><option value="unknown">No especificada</option></select></div>
+              <div class="filter-actions"><button type="button" class="btn btn-secondary" id="clearFiltersBtn">Limpiar filtros</button></div>
+            </div>
+          </details>
+        </aside>
+        <div class="results-area">
+          <div id="activeFilters" class="active-filters" aria-live="polite" hidden></div>
+          <div class="library" id="workoutList"><div class="empty">Cargando biblioteca de entrenamientos…</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-panel" id="detailPanel" hidden>
+      <div class="back-row"><button type="button" class="btn btn-quiet" id="backToLibrary">← Volver a la biblioteca</button></div>
+      <div class="detail-head"><div><div class="eyebrow" id="detailCategory">DETALLE DEL ENTRENAMIENTO</div><h2 id="detailTitle"></h2><p id="detailDay"></p></div><div class="category" id="detailSource"></div></div>
+      <div class="detail-body">
+        <div class="stats-grid">
+          <div class="stat"><div class="k">Intervalos</div><div class="v" id="detailIntervals"></div></div>
+          <div class="stat"><div class="k">Duración</div><div class="v" id="detailDuration"></div></div>
+          <div class="stat"><div class="k">Recuperación</div><div class="v" id="detailRecovery"></div></div>
+          <div class="stat"><div class="k">Terreno</div><div class="v" id="detailTerrain"></div></div>
+        </div>
+        <div class="protocol"><h3>Objetivo y nivel</h3><p id="detailObjective"></p><p id="detailLevel"></p></div>
+        <div class="protocol"><h3>1. Calentamiento</h3><p id="detailWarmup"></p></div>
+        <div class="protocol"><h3>2. Bloque principal</h3><p id="detailProtocol"></p></div>
+        <div class="protocol"><h3>3. Recuperación entre bloques</h3><p id="detailBlockRecovery"></p></div>
+        <div class="protocol"><h3>4. Vuelta a la calma</h3><p id="detailCooldown"></p></div>
+        <div class="protocol"><h3>Zona / sensación objetivo</h3><p id="detailZones"></p></div>
+        <div class="protocol"><h3>Precauciones de ejecución</h3><p id="detailSafety"></p></div>
+        <div class="detail-actions"><button type="button" class="btn btn-primary" id="logSessionBtn">＋ Registrar esta sesión</button><button type="button" class="btn btn-secondary" id="changeWorkoutBtn">Elegir otro entrenamiento</button></div>
+      </div>
+    </section>
+
+    <section class="form-panel" id="formPanel">
+      <div class="form-head"><h2>Registrar sensaciones</h2><p id="formWorkoutName">Guarda cómo te fue en este entrenamiento.</p></div>
+      <form id="sessionForm">
+        <div class="form-grid">
+          <div class="form-field"><label for="tiempoReal">Tiempo real</label><input class="control" id="tiempoReal" type="text" placeholder="Ej. 1 h 45 min"></div>
+          <div class="form-field"><label for="distancia">Distancia (km)</label><input class="control" id="distancia" type="number" min="0" step="0.1" placeholder="Ej. 42.5"></div>
+          <div class="form-field"><label for="rpe">Esfuerzo percibido (RPE 1–10)</label><input class="control" id="rpe" type="number" min="1" max="10" step="1" placeholder="Ej. 7"><p class="hint">1 = muy suave · 10 = esfuerzo máximo percibido</p></div>
+          <div class="form-field"><label for="fatiga">Sensación de fatiga</label><select class="control" id="fatiga"><option value="">Selecciona una opción</option><option>Baja</option><option>Media</option><option>Alta</option><option>Muy alta</option></select></div>
+          <div class="form-field full"><label for="notas">Notas del entrenamiento</label><textarea class="control" id="notas" placeholder="Cómo te sentiste, clima, alimentación, molestias…"></textarea></div>
+          <div class="form-field full"><label for="comentarios">Comentarios adicionales (opcional)</label><textarea class="control" id="comentarios" placeholder="Cualquier detalle que quieras conservar"></textarea></div>
+        </div>
+        <div class="form-actions"><button class="btn btn-primary" id="saveBtn" type="submit">Guardar sesión</button><button class="btn btn-secondary" id="cancelFormBtn" type="button">Cancelar</button><span id="status" role="status" aria-live="polite"></span></div>
+      </form>
+    </section>
+    <p class="footnote">Aguriza Training · Planifica aquí, analiza tus actividades en Strava.</p>
+  </main>
+
+  <script>
+    let workouts = [];
+    let selectedWorkout = null;
+    const categoryIcon = {'Fuerza':'↗','Explosividad':'⚡','Resistencia':'⛰','Velocidad e intervalos':'⌁','Tempo':'◷','Mixto / técnica':'◇'};
+    const filterConfig = [
+      {id:'search',key:'search',label:'Buscar',defaultValue:''},
+      {id:'categoryFilter',key:'category',label:'Categoría',defaultValue:'Todos'},
+      {id:'terrainFilter',key:'terrain',label:'Terreno',defaultValue:'Todos'},
+      {id:'levelFilter',key:'level',label:'Nivel',defaultValue:'Todos'},
+      {id:'durationFilter',key:'duration',label:'Duración',defaultValue:'Todos'}
+    ];
+
+    window.addEventListener('load', () => {
+      filterConfig.forEach(f => document.getElementById(f.id).addEventListener(f.id === 'search' ? 'input' : 'change', renderWorkouts));
+      document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
+      document.getElementById('backToLibrary').addEventListener('click', backToLibrary);
+      document.getElementById('logSessionBtn').addEventListener('click', openForm);
+      document.getElementById('changeWorkoutBtn').addEventListener('click', backToLibrary);
+      document.getElementById('cancelFormBtn').addEventListener('click', () => document.getElementById('formPanel').classList.remove('open'));
+      document.getElementById('sessionForm').addEventListener('submit', submitData);
+
+      const filterDetails = document.getElementById('filterDetails');
+      const mobile = window.matchMedia('(max-width: 650px)');
+      const syncFilterDisclosure = () => {
+        if (mobile.matches) filterDetails.removeAttribute('open');
+        else filterDetails.setAttribute('open','');
+      };
+      syncFilterDisclosure();
+      if (mobile.addEventListener) mobile.addEventListener('change', syncFilterDisclosure);
+      else if (mobile.addListener) mobile.addListener(syncFilterDisclosure);
+
+      callApi('getPlanOptions').then(data => {
+        workouts = Array.isArray(data) ? data : [];
+        renderWorkouts();
+      }).catch(err => {
+        document.getElementById('workoutList').replaceChildren();
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'No se pudo cargar la biblioteca: ' + errorText(err);
+        document.getElementById('workoutList').appendChild(empty);
+        document.getElementById('resultCount').textContent = 'Error de carga';
+      });
+    });
+
+    function getFilterState() {
+      return {
+        search: document.getElementById('search').value.trim(),
+        category: document.getElementById('categoryFilter').value,
+        terrain: document.getElementById('terrainFilter').value,
+        level: document.getElementById('levelFilter').value,
+        duration: document.getElementById('durationFilter').value
+      };
+    }
+
+    function isDurationMatch(value, bucket) {
+      if (bucket === 'Todos') return true;
+      const raw = String(value || '').toLocaleLowerCase('es');
+      if (bucket === 'unknown') return !raw || /no especificad|por definir|según protocolo|segun protocolo/.test(raw);
+      if (!raw || /no especificad|por definir|según protocolo|segun protocolo/.test(raw)) return false;
+
+      const matches = [...raw.matchAll(/(\d+(?:[.,]\d+)?)\s*(h|hr|hrs|hora|horas|min|mins|minuto|minutos|m)\b/g)];
+      if (!matches.length) return true;
+
+      const values = matches.map(m => {
+        const n = Number(m[1].replace(',','.'));
+        return {
+          minutes: /^(h|hr|hrs|hora|horas)$/.test(m[2]) ? n * 60 : n,
+          unit: /^(h|hr|hrs|hora|horas)$/.test(m[2]) ? 'hours' : 'minutes'
+        };
+      });
+
+      const hasHoursAndMinutes =
+        values.some(v => v.unit === 'hours') && values.some(v => v.unit === 'minutes');
+      const estimate = hasHoursAndMinutes
+        ? values.reduce((sum,v) => sum + v.minutes,0)
+        : Math.max(...values.map(v => v.minutes));
+
+      if (bucket === 'short') return estimate <= 45;
+      if (bucket === 'medium') return estimate > 45 && estimate <= 75;
+      if (bucket === 'long') return estimate > 75;
+      return true;
+    }
+
+    function isLevelMatch(value, bucket) {
+      if (bucket === 'Todos') return true;
+      const text = String(value || '').toLocaleLowerCase('es');
+      if (bucket === 'Ajustar') {
+        return !text || /ajustar|no especificad|según experiencia|segun experiencia/.test(text);
+      }
+      return text.includes(bucket.toLocaleLowerCase('es'));
+    }
+
+    function renderWorkouts() {
+      const filters = getFilterState();
+      const query = filters.search.toLocaleLowerCase('es');
+
+      const filtered = workouts.filter(w => {
+        const haystack = [
+          w.opcion,w.descripcion,w.dia,w.terreno,w.zonas,w.categoria,
+          w.fuente,w.objetivo,w.nivel,w.bloquePrincipal,w.calentamiento,w.seguridad
+        ].join(' ').toLocaleLowerCase('es');
+
+        const matchesQuery = !query || haystack.includes(query);
+        const terrainText = String(w.terreno || '').toLocaleLowerCase('es');
+        let matchesTerrain = filters.terrain === 'Todos';
+
+        if (!matchesTerrain && filters.terrain === 'Ruta') {
+          matchesTerrain = /ruta|grupal|variable/.test(terrainText) ||
+            /grupal|fondo/.test(String(w.opcion).toLocaleLowerCase('es'));
+        }
+
+        if (!matchesTerrain && filters.terrain === 'Montaña') {
+          matchesTerrain = /montaña|montana/.test(terrainText);
+        }
+
+        if (
+          !matchesTerrain && filters.terrain !== 'Todos' &&
+          filters.terrain !== 'Ruta' && filters.terrain !== 'Montaña'
+        ) {
+          matchesTerrain = terrainText.includes(filters.terrain.toLocaleLowerCase('es'));
+        }
+
+        return matchesQuery &&
+          matchesTerrain &&
+          (filters.category === 'Todos' || w.categoria === filters.category) &&
+          isLevelMatch(w.nivel,filters.level) &&
+          isDurationMatch(w.duracion,filters.duration);
+      });
+
+      const list = document.getElementById('workoutList');
+      list.replaceChildren();
+      document.getElementById('resultCount').textContent =
+        filtered.length + (filtered.length === 1 ? ' entrenamiento' : ' entrenamientos');
+
+      renderActiveFilters(filters);
+
+      if (!filtered.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+
+        const msg = document.createElement('p');
+        msg.textContent = 'No encontramos entrenamientos con esta combinación de filtros.';
+
+        const reset = document.createElement('button');
+        reset.type = 'button';
+        reset.className = 'btn btn-secondary';
+        reset.textContent = 'Limpiar filtros';
+        reset.addEventListener('click',clearFilters);
+
+        empty.append(msg,reset);
+        list.appendChild(empty);
+        return;
+      }
+
+      filtered.forEach(w => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'workout' +
+          (selectedWorkout && selectedWorkout.id === w.id ? ' selected' : '');
+        card.setAttribute('aria-label','Ver entrenamiento: ' + w.opcion);
+        card.addEventListener('click', () => selectWorkout(w));
+
+        const top = document.createElement('div');
+        top.className = 'workout-top';
+
+        const icon = document.createElement('div');
+        icon.className = 'workout-icon';
+        icon.setAttribute('aria-hidden','true');
+        icon.textContent = categoryIcon[w.categoria] || '⛰';
+
+        const cat = document.createElement('span');
+        cat.className = 'category';
+        cat.textContent = w.categoria || 'Mixto / técnica';
+        top.append(icon,cat);
+
+        const title = document.createElement('h3');
+        title.textContent = w.opcion;
+
+        const day = document.createElement('div');
+        day.className = 'day';
+        day.textContent = [w.dia,w.fuente].filter(Boolean).join(' · ');
+
+        const summary = document.createElement('div');
+        summary.className = 'summary';
+        summary.textContent = w.objetivo || w.descripcion || 'Consulta el protocolo completo.';
+
+        const meta = document.createElement('div');
+        meta.className = 'mini-meta';
+
+        [
+          [w.terreno || 'Terreno variable'],
+          'Duración: ' + (w.duracion || 'No especificada'),
+          'Zona ' + (w.zonas || 'por definir')
+        ].forEach(txt => {
+          const tag = document.createElement('span');
+          tag.textContent = txt;
+          meta.appendChild(tag);
+        });
+
+        const footer = document.createElement('div');
+        footer.className = 'select-label';
+        footer.textContent = 'Ver entrenamiento →';
+
+        card.append(top,title,day,summary,meta,footer);
+        list.appendChild(card);
+      });
+    }
+
+    function renderActiveFilters(filters) {
+      const host = document.getElementById('activeFilters');
+      host.replaceChildren();
+
+      const active = [];
+      if (filters.search) active.push({key:'search',label:'Buscar: ' + filters.search});
+      if (filters.category !== 'Todos') active.push({key:'category',label:filters.category});
+      if (filters.terrain !== 'Todos') active.push({key:'terrain',label:'Terreno: ' + filters.terrain});
+      if (filters.level !== 'Todos') {
+        active.push({key:'level',label:'Nivel: ' + (filters.level === 'Ajustar' ? 'Por ajustar' : filters.level)});
+      }
+      if (filters.duration !== 'Todos') {
+        active.push({
+          key:'duration',
+          label:'Duración: ' + ({
+            short:'Hasta 45 min',
+            medium:'46–75 min',
+            long:'Más de 75 min',
+            unknown:'No especificada'
+          }[filters.duration] || filters.duration)
+        });
+      }
+
+      document.getElementById('activeFilterCount').textContent =
+        active.length + (active.length === 1 ? ' activo' : ' activos');
+      host.hidden = active.length === 0;
+      if (!active.length) return;
+
+      const label = document.createElement('span');
+      label.className = 'active-filters-label';
+      label.textContent = 'Filtros activos:';
+      host.appendChild(label);
+
+      active.forEach(item => {
+        const chip = document.createElement('span');
+        chip.className = 'active-filter';
+
+        const text = document.createElement('span');
+        text.textContent = item.label;
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.textContent = '×';
+        remove.setAttribute('aria-label','Quitar filtro: ' + item.label);
+        remove.addEventListener('click',() => removeFilter(item.key));
+
+        chip.append(text,remove);
+        host.appendChild(chip);
+      });
+
+      const clear = document.createElement('button');
+      clear.type = 'button';
+      clear.className = 'btn btn-quiet';
+      clear.textContent = 'Borrar todos';
+      clear.addEventListener('click',clearFilters);
+      host.appendChild(clear);
+    }
+
+    function removeFilter(key) {
+      const item = filterConfig.find(f => f.key === key);
+      if (!item) return;
+      const control = document.getElementById(item.id);
+      control.value = item.defaultValue;
+      renderWorkouts();
+    }
+
+    function clearFilters() {
+      filterConfig.forEach(f => {
+        document.getElementById(f.id).value = f.defaultValue;
+      });
+      renderWorkouts();
+    }
+
+    function selectWorkout(w) {
+      selectedWorkout = w;
+
+      setText('detailCategory',
+        (categoryIcon[w.categoria] || '⛰') + ' ' +
+        String(w.categoria || 'ENTRENAMIENTO').toUpperCase());
+      setText('detailTitle', w.opcion);
+      setText('detailDay', [w.dia,w.terreno].filter(Boolean).join(' · '));
+      setText('detailSource', 'Biblioteca: ' + (w.fuente || 'Entrenamientos'));
+      setText('detailIntervals', w.intervalos || 'Según protocolo');
+      setText('detailDuration', w.duracion || 'No especificada');
+      setText('detailRecovery', w.recuperacion || 'Según protocolo');
+      setText('detailTerrain', w.terreno || 'Variable');
+      setText('detailObjective', w.objetivo || w.categoria || 'Objetivo por definir');
+      setText('detailLevel', 'Nivel sugerido: ' + (w.nivel || 'Ajustar según experiencia'));
+      setText('detailWarmup', w.calentamiento || 'No hay calentamiento específico registrado para esta sesión.');
+      setText('detailProtocol', w.bloquePrincipal || w.descripcion || 'No hay un bloque principal registrado.');
+      setText('detailBlockRecovery',
+        w.recuperacionBloques ||
+        ('Recuperación entre repeticiones: ' + (w.recuperacion || 'según protocolo') +
+         '. No se especificó una recuperación separada entre bloques.'));
+      setText('detailCooldown', w.enfriamiento || 'No hay vuelta a la calma específica registrada para esta sesión.');
+      setText('detailZones', w.zonas || 'Ajustar según percepción de esfuerzo');
+      setText('detailSafety', w.seguridad || 'Adapta el esfuerzo a tu experiencia y elige un tramo seguro.');
+
+      document.getElementById('detailPanel').hidden = false;
+      document.getElementById('formPanel').classList.remove('open');
+      document.body.classList.add('detail-mode');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function backToLibrary() {
+      document.body.classList.remove('detail-mode');
+      document.getElementById('detailPanel').hidden = true;
+      document.getElementById('formPanel').classList.remove('open');
+      window.scrollTo({top:0,behavior:'smooth'});
+      renderWorkouts();
+    }
+
+    function openForm() {
+      if (!selectedWorkout) return;
+      setText('formWorkoutName', 'Entrenamiento: ' + selectedWorkout.opcion);
+      document.getElementById('formPanel').classList.add('open');
+      document.getElementById('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function submitData(event) {
+      event.preventDefault();
+
+      if (!selectedWorkout) {
+        showMessage('Selecciona un entrenamiento.', false);
+        return;
+      }
+
+      const distance = document.getElementById('distancia').value;
+      const rpe = document.getElementById('rpe').value;
+
+      if (distance !== '' && (!Number.isFinite(Number(distance)) || Number(distance) < 0)) {
+        showMessage('La distancia debe ser cero o un número positivo.', false);
+        return;
+      }
+
+      if (rpe !== '' && (!Number.isInteger(Number(rpe)) || Number(rpe) < 1 || Number(rpe) > 10)) {
+        showMessage('El RPE debe estar entre 1 y 10.', false);
+        return;
+      }
+
+      const payload = {
+        entrenamiento: selectedWorkout.opcion + ' [' + selectedWorkout.fuente + ']',
+        tiempoReal: document.getElementById('tiempoReal').value,
+        distancia,
+        rpe,
+        fatiga: document.getElementById('fatiga').value,
+        notas: document.getElementById('notas').value,
+        comentarios: document.getElementById('comentarios').value
+      };
+
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      btn.textContent = 'Guardando…';
+
+      callApi('saveSession', payload).then(result => {
+        showMessage(result || 'Sesión guardada con éxito.', true);
+        ['tiempoReal','distancia','rpe','fatiga','notas','comentarios'].forEach(id => {
+          document.getElementById(id).value = '';
+        });
+        btn.disabled = false;
+        btn.textContent = 'Guardar sesión';
+      }).catch(err => {
+        showMessage('No se pudo guardar: ' + errorText(err), false);
+        btn.disabled = false;
+        btn.textContent = 'Guardar sesión';
+      });
+    }
+
+    async function callApi(action, payload) {
+      const response = await fetch('/.netlify/functions/api', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({action, payload: payload || null})
+      });
+
+      let result;
+      try {
+        result = await response.json();
+      } catch (_) {
+        throw new Error('El servidor devolvió una respuesta no válida. Revisa la configuración de Netlify y Apps Script.');
+      }
+
+      if (!response.ok || !result || result.ok !== true) {
+        throw new Error(result && result.error ? result.error : 'No fue posible completar la solicitud.');
+      }
+
+      return result.data;
+    }
+
+    function setText(id,value) {
+      document.getElementById(id).textContent = value == null ? '' : String(value);
+    }
+
+    function errorText(err) {
+      return err && err.message ? err.message : String(err || 'Error desconocido');
+    }
+
+    function showMessage(message,ok) {
+      const el = document.getElementById('status');
+      el.textContent = message;
+      el.className = ok ? 'success' : 'error';
+    }
+  </script>
+</body>
+</html>
